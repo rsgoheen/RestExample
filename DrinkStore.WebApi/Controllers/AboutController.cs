@@ -11,7 +11,12 @@ namespace DrinkStore.WebApi.Controllers
         [HttpGet]
         public IHttpActionResult Get()
         {
-            return Ok(new {Message = $"Web api version: {Assembly.GetExecutingAssembly().GetName().Version}"});
+            return Ok(
+                new
+                {
+                    Name = "Shopping list (drinks) web API",
+                    Version = $"{Assembly.GetExecutingAssembly().GetName().Version}"
+                });
         }
     }
 }
