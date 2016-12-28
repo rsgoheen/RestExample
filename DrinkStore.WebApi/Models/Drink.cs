@@ -2,9 +2,10 @@
 {
     public class Drink
     {
-        public Drink(string name)
+        public Drink(string name, int quantity = 1)
         {
             Name = name;
+            Quantity = quantity;
         }
 
         protected bool Equals(Drink other)

@@ -6,7 +6,7 @@ namespace DrinkStore.WebApi.Repository
     {
         ShoppingList GetList(long id);
 
-        void Create(ShoppingList shoppingList);
+        ShoppingList Create(ShoppingList shoppingList);
         void Update(ShoppingList shoppingList);
     }
 }
