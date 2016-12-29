@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System;
+using System.Linq;
+using System.Net;
 using System.Web.Http;
 using DrinkStore.WebApi.Models;
 using DrinkStore.WebApi.Repository;
@@ -23,7 +25,6 @@ namespace DrinkStore.WebApi.Controllers
                 return BadRequest("Could not parse Drink from request");
 
             var shoppingList = _repository.GetList(listId);
-
             if (shoppingList == null)
                 return NotFound();
 
@@ -35,6 +36,59 @@ namespace DrinkStore.WebApi.Controllers
 
             return Created<Drink>($"{Request.RequestUri}/drinks/{drink.Name}", drink);
         }
+
+        [HttpPut]
+        [Route("shoppinglists/{listId:long}/drinks")]
+        public IHttpActionResult UpdateDrink(long listId, [FromBody]Drink drink)
+        {
+            if (drink == null)
+                return BadRequest("Could not parse Drink from request");
+
+            var shoppingList = _repository.GetList(listId);
+            if (shoppingList == null)
+                return NotFound();
+
+            if (! shoppingList.HasDrink(drink))
+                return NotFound();
+
+            shoppingList.UpdateDrink(drink);
+
+            return Ok(drink);
+        }
+
+
+        [HttpGet]
+        [Route("shoppinglists/{listId:long}/drinks")]
+        public IHttpActionResult GetAllDrinks(long listId)
+        {
+            var shoppingList = _repository.GetList(listId);
+
+            if (shoppingList == null)
+                return NotFound();
+
+            return Ok(shoppingList.Drinks);
+        }
+
+        [HttpGet]
+        [Route("shoppinglists/{listId:long}/drinks/{drinkName}")]
+        public IHttpActionResult GetDrink(long listId, string drinkName)
+        {
+            var shoppingList = _repository.GetList(listId);
+
+            if (shoppingList == null)
+                return NotFound();
+
+            var drink = shoppingList
+                .Drinks
+                .FirstOrDefault(x => string.Equals(drinkName, x.Name, StringComparison.InvariantCultureIgnoreCase));
+
+            if (drink == null)
+                return NotFound();
+
+            return Ok(shoppingList.Drinks);
+        }
+
+
 
         [HttpDelete]
         [Route("shoppinglists/{listId:long}/drinks/{drinkName}")]

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DrinkStore.WebApi.Models
 {
@@ -19,7 +18,7 @@ namespace DrinkStore.WebApi.Models
 
         public void UpdateDrink(Drink drink)
         {
-            _drinks[drink.Name] = drink;
+            _drinks[drink.Name].Quantity = drink.Quantity;
         }
 
         public void AddDrink(Drink drink)
