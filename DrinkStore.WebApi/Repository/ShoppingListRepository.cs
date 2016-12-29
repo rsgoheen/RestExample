@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
 using DrinkStore.WebApi.Models;
@@ -48,7 +49,10 @@ namespace DrinkStore.WebApi.Repository
 
         public void Update(ShoppingList shoppingList)
         {
-            throw new System.NotImplementedException();
+            if(!ShoppingLists.ContainsKey(shoppingList.Id))
+                throw new ArgumentException("Shopping list not found in repository");
+
+            ShoppingLists[shoppingList.Id] = shoppingList;
         }
     }
 }

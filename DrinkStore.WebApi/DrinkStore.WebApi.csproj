@@ -110,8 +110,8 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AboutController.cs" />
+    <Compile Include="Controllers\DrinkController.cs" />
     <Compile Include="Controllers\ShoppingListController.cs" />
     <Compile Include="DependencyInjection\InMemoryRegistry.cs" />
     <Compile Include="Global.asax.cs">
@@ -135,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="App_Start\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

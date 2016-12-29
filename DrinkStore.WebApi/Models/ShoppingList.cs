@@ -27,9 +27,13 @@ namespace DrinkStore.WebApi.Models
             _drinks.Add(drink.Name, drink);
         }
 
-        public void RemoveDrink(Drink drink)
+        public bool RemoveDrink(string name)
         {
-            _drinks.Remove(drink.Name);
+            if (!_drinks.ContainsKey(name))
+                return false;
+
+            _drinks.Remove(name);
+            return true;
         }
 
         protected bool Equals(ShoppingList other)

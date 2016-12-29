@@ -1,7 +1,6 @@
 ﻿using System.Web.Http;
 using DrinkStore.WebApi;
 using DrinkStore.WebApi.DependencyInjection;
-using DrinkStore.WebApi.Repository;
 using Microsoft.Owin;
 using Owin;
 using WebApi.StructureMap;
@@ -14,11 +13,24 @@ namespace DrinkStore.WebApi
     {
         public void Configuration(IAppBuilder app)
         {
-            GlobalConfiguration.Configuration.UseStructureMap(
-                x =>
-                {
-                    x.AddRegistry<InMemoryRegistry>();
-                });
+            var config = new HttpConfiguration();
+
+            config.UseStructureMap(
+            x =>
+            {
+                x.AddRegistry<InMemoryRegistry>();
+            });
+
+            // Web API routes
+            config.MapHttpAttributeRoutes();
+
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+
+            app.UseWebApi(config);
         }
     }
 }
