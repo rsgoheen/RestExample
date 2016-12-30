@@ -7,7 +7,9 @@ namespace DrinkStore.WebApi.DependencyInjection
     {
         public InMemoryRegistry()
         {
+            ForConcreteType<ShoppingListRepository>().Configure.Singleton();
             For<IShoppingListRepository>().Use<ShoppingListRepository>();
+            For<IDrinkRepository>().Use<ShoppingListRepository>();
         }
     }
 }

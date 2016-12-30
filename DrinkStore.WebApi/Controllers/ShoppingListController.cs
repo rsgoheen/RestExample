@@ -16,11 +16,10 @@ namespace DrinkStore.WebApi.Controllers
         }
 
         [HttpGet]
-
         [Route("shoppinglists/{id:long}")]
         public IHttpActionResult GetList(long id)
         {
-            var shoppingList = _repository.GetList(id);
+            var shoppingList = _repository.GetShoppingList(id);
 
             if (shoppingList == null)
                 return NotFound();
@@ -35,7 +34,7 @@ namespace DrinkStore.WebApi.Controllers
             if (postedShoppingList == null)
                 return BadRequest("Could not parse ShoppingList from request");
 
-            var shoppingList = _repository.Create(postedShoppingList);
+            var shoppingList = _repository.CreateShoppingList(postedShoppingList);
 
             return Created<ShoppingList>($"{Request.RequestUri}/{shoppingList.Id}", shoppingList);
         }

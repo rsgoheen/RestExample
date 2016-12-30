@@ -4,9 +4,8 @@ namespace DrinkStore.WebApi.Repository
 {
     public interface IShoppingListRepository
     {
-        ShoppingList GetList(long id);
-
-        ShoppingList Create(ShoppingList shoppingList);
-        void Update(ShoppingList shoppingList);
+        ShoppingList GetShoppingList(long id);
+        ShoppingList CreateShoppingList(ShoppingList shoppingList);
+        void UpdateShoppingList(ShoppingList shoppingList);
     }
 }

@@ -10,11 +10,13 @@ namespace DrinkStore.WebApi.Controllers
     [RoutePrefix("api")]
     public class DrinkController : ApiController
     {
-        private readonly IShoppingListRepository _repository;
+        private readonly IShoppingListRepository _shoppingListRepository;
+        private readonly IDrinkRepository _drinkRepository;
 
-        public DrinkController(IShoppingListRepository repository)
+        public DrinkController(IShoppingListRepository shoppingListRepository, IDrinkRepository drinkRepository)
         {
-            _repository = repository;
+            _shoppingListRepository = shoppingListRepository;
+            _drinkRepository = drinkRepository;
         }
 
         [HttpPost]
@@ -24,15 +26,20 @@ namespace DrinkStore.WebApi.Controllers
             if (drink == null)
                 return BadRequest("Could not parse Drink from request");
 
-            var shoppingList = _repository.GetList(listId);
+            var shoppingList = _shoppingListRepository.GetShoppingList(listId);
             if (shoppingList == null)
                 return NotFound();
 
             // Note: for now, consider an add of an existing drink to be an update
             if (shoppingList.HasDrink(drink))
+            {
                 shoppingList.UpdateDrink(drink);
+            }
             else
+            {
+                drink = _drinkRepository.CreateDrink(drink);
                 shoppingList.AddDrink(drink);
+            }
 
             return Created<Drink>($"{Request.RequestUri}/drinks/{drink.Name}", drink);
         }
@@ -44,7 +51,7 @@ namespace DrinkStore.WebApi.Controllers
             if (drink == null)
                 return BadRequest("Could not parse Drink from request");
 
-            var shoppingList = _repository.GetList(listId);
+            var shoppingList = _shoppingListRepository.GetShoppingList(listId);
             if (shoppingList == null)
                 return NotFound();
 
@@ -56,12 +63,11 @@ namespace DrinkStore.WebApi.Controllers
             return Ok(drink);
         }
 
-
         [HttpGet]
         [Route("shoppinglists/{listId:long}/drinks")]
         public IHttpActionResult GetAllDrinks(long listId)
         {
-            var shoppingList = _repository.GetList(listId);
+            var shoppingList = _shoppingListRepository.GetShoppingList(listId);
 
             if (shoppingList == null)
                 return NotFound();
@@ -70,17 +76,17 @@ namespace DrinkStore.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("shoppinglists/{listId:long}/drinks/{drinkName}")]
-        public IHttpActionResult GetDrink(long listId, string drinkName)
+        [Route("shoppinglists/{listId:long}/drinks/{drinkId}")]
+        public IHttpActionResult GetDrink(long listId, int drinkId)
         {
-            var shoppingList = _repository.GetList(listId);
+            var shoppingList = _shoppingListRepository.GetShoppingList(listId);
 
             if (shoppingList == null)
                 return NotFound();
 
             var drink = shoppingList
                 .Drinks
-                .FirstOrDefault(x => string.Equals(drinkName, x.Name, StringComparison.InvariantCultureIgnoreCase));
+                .FirstOrDefault(x => x.Id == drinkId);
 
             if (drink == null)
                 return NotFound();
@@ -88,21 +94,19 @@ namespace DrinkStore.WebApi.Controllers
             return Ok(shoppingList.Drinks);
         }
 
-
-
         [HttpDelete]
-        [Route("shoppinglists/{listId:long}/drinks/{drinkName}")]
-        public IHttpActionResult DeleteDrink(long listId, string drinkName)
+        [Route("shoppinglists/{listId:long}/drinks/{drinkId}")]
+        public IHttpActionResult DeleteDrink(long listId, int drinkId)
         {
-            var shoppingList = _repository.GetList(listId);
+            var shoppingList = _shoppingListRepository.GetShoppingList(listId);
 
             if (shoppingList == null)
                 return NotFound();
 
-            if (!shoppingList.RemoveDrink(drinkName))
+            if (!shoppingList.RemoveDrink(drinkId))
                 return NotFound();
 
-            _repository.Update(shoppingList);
+            _shoppingListRepository.UpdateShoppingList(shoppingList);
 
             return StatusCode(HttpStatusCode.NoContent);
         }

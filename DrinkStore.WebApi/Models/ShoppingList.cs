@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace DrinkStore.WebApi.Models
 {
     public class ShoppingList
     {
-        private readonly Dictionary<string, Drink> _drinks = new Dictionary<string, Drink>();
+        private readonly Dictionary<int, Drink> _drinks = new Dictionary<int, Drink>();
 
         public long Id { get; set; }
         public string Name { get; set; }
@@ -13,25 +14,26 @@ namespace DrinkStore.WebApi.Models
 
         public bool HasDrink(Drink drink)
         {
-            return _drinks.ContainsKey(drink.Name);
+            return _drinks.ContainsKey(drink.Id);
         }
 
         public void UpdateDrink(Drink drink)
         {
-            _drinks[drink.Name].Quantity = drink.Quantity;
+            _drinks[drink.Id].Quantity = drink.Quantity;
         }
 
         public void AddDrink(Drink drink)
         {
-            _drinks.Add(drink.Name, drink);
+            Debug.Assert(drink.Id != 0, "Expecting a non-zero Drink ID");
+            _drinks.Add(drink.Id, drink);
         }
 
-        public bool RemoveDrink(string name)
+        public bool RemoveDrink(int id)
         {
-            if (!_drinks.ContainsKey(name))
+            if (!_drinks.ContainsKey(id))
                 return false;
 
-            _drinks.Remove(name);
+            _drinks.Remove(id);
             return true;
         }
 

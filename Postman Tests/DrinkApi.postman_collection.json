@@ -136,7 +136,7 @@
 				}
 			],
 			"request": {
-				"url": "http://localhost:34154/api/shoppinglists/1/drinks/Diet%20Pepsi",
+				"url": "http://localhost:34154/api/shoppinglists/1/drinks/1",
 				"method": "DELETE",
 				"header": [],
 				"body": {},
@@ -158,7 +158,7 @@
 				}
 			],
 			"request": {
-				"url": "http://localhost:34154/api/shoppinglists/1/drinks/Diet%20Pepsi",
+				"url": "http://localhost:34154/api/shoppinglists/1/drinks/1",
 				"method": "DELETE",
 				"header": [],
 				"body": {},

@@ -6,7 +6,7 @@ using DrinkStore.WebApi.Models;
 
 namespace DrinkStore.WebApi.Repository
 {
-    class ShoppingListRepository : IShoppingListRepository
+    class ShoppingListRepository : IShoppingListRepository, IDrinkRepository
     {
         private const string CacheKey = "ShoppingLists";
 
@@ -27,7 +27,7 @@ namespace DrinkStore.WebApi.Repository
             }
         }
 
-        public ShoppingList GetList(long id)
+        public ShoppingList GetShoppingList(long id)
         {
             ShoppingList shoppingList = null;
             ShoppingLists.TryGetValue(id, out shoppingList);
@@ -35,7 +35,7 @@ namespace DrinkStore.WebApi.Repository
             return shoppingList;
         }
 
-        public ShoppingList Create(ShoppingList shoppingList)
+        public ShoppingList CreateShoppingList(ShoppingList shoppingList)
         {
             var id = ShoppingLists.Any()
                 ? ShoppingLists.Keys.Max() + 1
@@ -47,12 +47,28 @@ namespace DrinkStore.WebApi.Repository
             return shoppingList;
         }
 
-        public void Update(ShoppingList shoppingList)
+        public void UpdateShoppingList(ShoppingList shoppingList)
         {
             if(!ShoppingLists.ContainsKey(shoppingList.Id))
                 throw new ArgumentException("Shopping list not found in repository");
 
             ShoppingLists[shoppingList.Id] = shoppingList;
+        }
+
+        public Drink CreateDrink(Drink drink)
+        {
+            var drinks = ShoppingLists
+                .Select(x => x.Value)
+                .SelectMany(x => x.Drinks)
+                .ToList();
+
+            var id = drinks.Any()
+                ? drinks.Max(x => x.Id) + 1
+                : 1;
+
+            drink.Id = id;
+
+            return drink;
         }
     }
 }
