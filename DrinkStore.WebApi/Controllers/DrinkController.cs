@@ -76,7 +76,7 @@ namespace DrinkStore.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("shoppinglists/{listId:long}/drinks/{drinkId}")]
+        [Route("shoppinglists/{listId:long}/drinks/{drinkId:int}")]
         public IHttpActionResult GetDrink(long listId, int drinkId)
         {
             var shoppingList = _shoppingListRepository.GetShoppingList(listId);
@@ -91,7 +91,7 @@ namespace DrinkStore.WebApi.Controllers
             if (drink == null)
                 return NotFound();
 
-            return Ok(shoppingList.Drinks);
+            return Ok(drink);
         }
 
         [HttpDelete]
