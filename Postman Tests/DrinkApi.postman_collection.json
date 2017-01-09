@@ -73,13 +73,13 @@
 						"type": "text/javascript",
 						"exec": [
 							"tests[\"Status code is 200\"] = responseCode.code === 200;",
-							"tests[\"Name is correct\"] = responseBody.has(\"Pepsi List\")"
+							"tests[\"X-Pagination is present\"] = postman.getResponseHeader(\"X-Pagination\");"
 						]
 					}
 				}
 			],
 			"request": {
-				"url": "http://localhost:34154/api/shoppinglists/1",
+				"url": "http://localhost:34154/api/shoppinglists",
 				"method": "GET",
 				"header": [],
 				"body": {},
