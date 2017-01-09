@@ -10,6 +10,11 @@ namespace DrinkStore.WebApi.Repository
     {
         private const string CacheKey = "ShoppingLists";
 
+        public IEnumerable<ShoppingList> GetShoppingLists()
+        {
+            return ShoppingLists.Values;
+        }
+
         private Dictionary<long, ShoppingList> ShoppingLists
         {
             get

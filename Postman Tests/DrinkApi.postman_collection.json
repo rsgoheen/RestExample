@@ -65,6 +65,29 @@
 			"response": []
 		},
 		{
+			"name": "http://localhost:34154/api/shoppinglists",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Name is correct\"] = responseBody.has(\"Pepsi List\")"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:34154/api/shoppinglists/1",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
 			"name": "http://localhost:34154/api/shoppinglists/1",
 			"event": [
 				{
@@ -117,6 +140,41 @@
 				"body": {
 					"mode": "raw",
 					"raw": "{\"Name\":\"Diet Pepsi\",\"Quantity\":10}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:34154/api/shoppinglists/1/drinks update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Correct Name\"] = jsonData.Name === \"Diet Pepsi\";",
+							"tests[\"Correct Quantity\"] = jsonData.Quantity === 100;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:34154/api/shoppinglists/1/drinks",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"Id\":1,\"Name\":\"Diet Pepsi\",\"Quantity\":100}"
 				},
 				"description": ""
 			},
